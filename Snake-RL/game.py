@@ -8,7 +8,7 @@ import numpy as np
 pygame.init()
 
 # Define font for text rendering
-font = pygame.font.Font('arial.ttf', 25)  # Font with size 25
+font = pygame.font.Font('zerovelo.ttf', 25)  # Font with size 25
 
 # Enum to represent the direction of movement
 class Direction(Enum):
@@ -23,15 +23,31 @@ Point = namedtuple('Point', 'x, y')
 # RGB colors for graphical elements
 WHITE = (255, 255, 255)  # Text color
 RED = (200, 0, 0)       # Food color
-BLUE1 = (0, 0, 255)     # Snake body color
-BLUE2 = (0, 100, 255)   # Snake border color
+BLUE1 = (216, 79, 42)     # Snake body color
+BLUE2 = (249, 116, 75)   # Snake border color
 BLACK = (0, 0, 0)       # Background color
+
+
+
 
 # Size of each grid block in pixels
 BLOCK_SIZE = 20
 
+APPLE_IMAGE = pygame.image.load("apple.png")
+APPLE_IMAGE = pygame.transform.scale(APPLE_IMAGE, (BLOCK_SIZE*1.2, BLOCK_SIZE*1.2))
+
+# Load a grassy background image (make sure the image exists in your working directory)
+BACKGROUND_IMAGE = pygame.image.load("wiese.jpg")
+BACKGROUND_IMAGE = pygame.transform.scale(BACKGROUND_IMAGE, (640, 480))  # Resize to fit the screen dimensions
+
 # Game speed, controls how quickly the game updates
-SPEED = 40
+SPEED = 20
+
+# Eye properties
+EYE_RADIUS = 6  # Radius of the eyes
+EYE_COLOR = WHITE  # Color of the eyes
+PUPIL_RADIUS = 2  # Radius of the pupils
+PUPIL_COLOR = BLACK  # Color of the pupils
 
 # Class for the snake game with AI capabilities
 class SnakeGameAI:
@@ -122,22 +138,50 @@ class SnakeGameAI:
 
     # Update the game's graphical elements
     def _update_ui(self):
-        self.display.fill(BLACK)  # Clear the screen with the background color
-        
-        # Draw the snake's body
+
+        self.display.blit(BACKGROUND_IMAGE, (0, 0))
+
         for pt in self.snake:
             pygame.draw.rect(self.display, BLUE1, pygame.Rect(pt.x, pt.y, BLOCK_SIZE, BLOCK_SIZE))  # Main color
             pygame.draw.rect(self.display, BLUE2, pygame.Rect(pt.x + 4, pt.y + 4, 12, 12))  # Border color
         
+        self._draw_eyes()
+
         # Draw the food item
-        pygame.draw.rect(self.display, RED, pygame.Rect(self.food.x, self.food.y, BLOCK_SIZE, BLOCK_SIZE))
+        self.display.blit(APPLE_IMAGE, (self.food.x, self.food.y))
         
         # Display the current score
-        text = font.render("Score: " + str(self.score), True, WHITE)  # Render text for score
+        text = font.render("Score: " + str(self.score), True, BLACK)  # Render text for score
         self.display.blit(text, [0, 0])  # Display the score at the top left
         
         # Update the Pygame display
         pygame.display.flip()  # Refresh the screen
+
+
+    def _draw_eyes(self):
+        # Determine the position for the eyes and pupils based on the snake's direction
+        if self.direction == Direction.RIGHT:
+            eye1 = (self.head.x + 14, self.head.y + 6)
+            eye2 = (self.head.x + 14, self.head.y + 14)
+        elif self.direction == Direction.LEFT:
+            eye1 = (self.head.x + 6, self.head.y + 6)
+            eye2 = (self.head.x + 6, self.head.y + 14)
+        elif self.direction == Direction.UP:
+            eye1 = (self.head.x + 6, self.head.y + 6)
+            eye2 = (self.head.x + 14, self.head.y + 6)
+        elif self.direction == Direction.DOWN:
+            eye1 = (self.head.x + 6, self.head.y + 14)
+            eye2 = (self.head.x + 14, self.head.y + 14)
+
+        # Draw the white eyes
+        pygame.draw.circle(self.display, EYE_COLOR, eye1, EYE_RADIUS)
+        pygame.draw.circle(self.display, EYE_COLOR, eye2, EYE_RADIUS)
+
+        # Draw the black pupils inside the eyes
+        pygame.draw.circle(self.display, PUPIL_COLOR, eye1, PUPIL_RADIUS)
+        pygame.draw.circle(self.display, PUPIL_COLOR, eye2, PUPIL_RADIUS)
+
+
 
     # Move the snake in the appropriate direction based on the action
     def _move(self, action):
