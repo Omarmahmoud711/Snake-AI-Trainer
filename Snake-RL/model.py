@@ -62,7 +62,7 @@ class QTrainer:
             if not done[idx]:
                 # If not terminal, calculate new Q-value with discounting
                 Q_new = reward[idx] + self.gamma * torch.max(self.model(next_state[idx]))
-            
+
             # Update the predicted action with the new Q-value
             target[idx][torch.argmax(action[idx]).item()] = Q_new
 

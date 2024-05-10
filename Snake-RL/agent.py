@@ -2,14 +2,15 @@ import torch
 import random
 import numpy as np
 from collections import deque
-from game import SnakeGameAI, Direction, Point  # Import game-related classes
-from model import Linear_QNet, QTrainer       # Import neural network and trainer
-from helper import plot                      # Import plotting utility
+from game import SnakeGameAI, Direction, Point
+from model import Linear_QNet, QTrainer
+from helper import plot
 
 # Configuration constants for the agent
 MAX_MEMORY = 100_000  # Maximum memory for replay buffer
 BATCH_SIZE = 1000     # Batch size for training
 LR = 0.001            # Learning rate for the optimizer
+TRAP_PENALTY = -5     # Negative reward for being trapped
 
 # Class representing the reinforcement learning agent
 class Agent:
@@ -18,8 +19,9 @@ class Agent:
         self.epsilon = 0  # Epsilon for exploration-exploitation trade-off
         self.gamma = 0.9  # Discount factor for Q-learning
         self.memory = deque(maxlen=MAX_MEMORY)  # Replay memory with maximum size
-        self.model = Linear_QNet(11, 256, 3)   # Q-learning model with 11 inputs, 256 hidden units, and 3 outputs
-        self.trainer = QTrainer(self.model, lr=LR, gamma=self.gamma)  # QTrainer for training the model
+        # Adjusted to accommodate the new state representation
+        self.model = Linear_QNet(12, 256, 3)  # Input size increased to consider trapped states
+        self.trainer = QTrainer(self.model, lr=LR, gamma=self.gamma)  # Trainer with learning rate and gamma
 
     # Get the state of the game for the agent's decision-making
     def get_state(self, game):
@@ -63,7 +65,9 @@ class Agent:
             game.food.x < game.head.x,  # Food is to the left
             game.food.x > game.head.x,  # Food is to the right
             game.food.y < game.head.y,  # Food is above
-            game.food.y > game.head.y  # Food is below
+            game.food.y > game.head.y,  # Food is below
+            # Check if the snake is trapped
+            game.is_trapped(),  # Returns True if trapped
         ]
 
         return np.array(state, dtype=int)  # Return state as a numpy array
