@@ -1,0 +1,4 @@
+torch>=2.1
+numpy
+fastapi>=0.110
+uvicorn[standard]>=0.27
