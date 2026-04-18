@@ -74,7 +74,7 @@ Right column: **trained** agent playing greedily from the checkpointed weights.
 
 ## Training results
 
-All four agents trained in parallel on a single RTX 6000 Ada (GPU 6), ~34 minutes total. The checkpoint saved for each mode is the *rolling-200-episode-mean best*, not just the final weights — so tail-noise at the end of training never overwrites a good policy.
+All four agents trained in parallel on a single GPU, ~34 minutes total. The checkpoint saved for each mode is the *rolling-200-episode-mean best*, not just the final weights — so tail-noise at the end of training never overwrites a good policy.
 
 | Mode      | Episodes | Best single score | **Best rolling-mean** | Throughput   |
 |-----------|---------:|------------------:|----------------------:|-------------:|
