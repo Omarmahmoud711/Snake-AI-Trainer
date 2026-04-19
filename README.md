@@ -8,6 +8,13 @@
 
 Four game modes. Live training view. Pre-trained playback. Human-vs-AI duel.
 
+[![Python](https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white)](https://www.python.org)
+[![PyTorch](https://img.shields.io/badge/PyTorch-2-EE4C2C?logo=pytorch&logoColor=white)](https://pytorch.org)
+[![FastAPI](https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
+[![Dueling DQN](https://img.shields.io/badge/Dueling_Double--DQN-4F46E5)](https://arxiv.org/abs/1511.06581)
+[![HTML5 Canvas](https://img.shields.io/badge/HTML5_Canvas-E34F26?logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API)
+[![License](https://img.shields.io/badge/License-MIT-blue)](#credits)
+
 <img src="assets/banner.png" width="760" alt="All four modes">
 
 </div>
